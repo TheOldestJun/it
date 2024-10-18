@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/select"
 
 import { useState } from "react";
+import axios from "axios";
 
 
 export default function CreateForm() {
@@ -19,6 +20,22 @@ export default function CreateForm() {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [roleId, setRoleId] = useState('');
+
+    const handleCreate = async () => {
+        const data = {
+            email: email,
+            password: password,
+            firstName: firstName,
+            lastName: lastName,
+            roleId: roleId,
+        };
+        try {
+            const response = await axios.post('/api/register', data);
+            console.log(response.data);
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     return (
         <div className='flex justify-center align-middle py-12 sm:px-6 lg:px-8'>
@@ -30,6 +47,7 @@ export default function CreateForm() {
                         type="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
+                        required
                     />
                 </div>
                 <div class="col-span-6">
@@ -60,7 +78,7 @@ export default function CreateForm() {
                     />
                 </div>
                 <div class="col-span-12">
-                    <Select onValueChange={() => setRoleId(value)}>
+                    <Select onValueChange={(value) => setRoleId(value)}>
                         <SelectTrigger className="w-full">
                             <SelectValue placeholder="Тип користувача" />
                         </SelectTrigger>
@@ -72,7 +90,7 @@ export default function CreateForm() {
                     </Select>
                 </div>
                 <div class="col-span-12">
-                    <Button type="submit" className="w-full">Створити</Button>
+                    <Button type="submit" onClick={handleCreate} className="w-full">Створити</Button>
                 </div>
             </div>
         </div>
